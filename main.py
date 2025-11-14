@@ -10,6 +10,7 @@ import time
 
 WORD_LIST = []
 WORD_LEN = 5
+DEFAULT_ATTEMPTS = 5
 
 
 def extract_words():
@@ -30,19 +31,24 @@ def get_random_number():
     return int(value) 
 
 def play_game():
+    global DEFAULT_ATTEMPTS
     extract_words()
     random_val = get_random_number()
     USER_ATTEMPTS = 0
-    TOTAL_TRIES = 5
-    print("[-] Welcome to Jayden's WORDLE. You Have" , TOTAL_TRIES, "Tries In Order To Guess The Word")
+    print("[-] Welcome to Jayden's WORDLE. You Have" , DEFAULT_ATTEMPTS, "Tries In Order To Guess The Word! Goodluck ;).")
 
     while True:
-        if USER_ATTEMPTS == TOTAL_TRIES:
+        target = WORD_LIST[random_val]
+        print(target)
+        guess = input("[-] Please enter a 5 letter word :): ")
+        answer = ["Bascat" for i in range(len(target))]
+
+        if USER_ATTEMPTS == DEFAULT_ATTEMPTS:
             print("[!] The Correct Word Was..",target)
             time.sleep(5)
             os.system('cls' if os.name == 'nt' else 'clear')
 
-            end_options = prompt_end_menu("You Lost! Would You Like To Play Again?", ["YES", "NO"])
+            end_options = prompt_menu("You Lost! Would You Like To Play Again?", ["YES", "NO"])
 
             match end_options:
                 case "YES":
@@ -51,18 +57,18 @@ def play_game():
                     main()
                     
 
-            
-
-        target = WORD_LIST[random_val]
-        print(target)
-        guess = input("[-] Please enter a 5 letter word :): ")
-        answer = ["Bascat" for i in range(len(target))]
-
         if guess == target:
+            os.system('cls' if os.name == 'nt' else 'clear')
             print("[!] Winner Winner Chicken Dinner!")
             time.sleep(1.5)
             os.system('cls' if os.name == 'nt' else 'clear')
-            end_options = prompt_end_menu("You Won! Would You Like To Play Again?", ["YES", "NO"])
+            end_options = prompt_menu("You Won! Would You Like To Play Again?", ["YES", "NO"])
+            
+            match end_options:
+                case "YES":
+                    play_game()
+                case "NO":
+                    main()
 
 
         else:
@@ -79,13 +85,13 @@ def play_game():
     
 
         print(answer)
-        print("[-] Tries left:", TOTAL_TRIES-USER_ATTEMPTS )
+        print("[-] Tries left:", DEFAULT_ATTEMPTS-USER_ATTEMPTS )
 
 
         
     
 
-def prompt_main_menu(messages, user_choices):
+def prompt_menu(messages, user_choices):
     menu = [
         inquirer3.List("choice", message = messages, choices = user_choices)
     ]
@@ -96,26 +102,57 @@ def prompt_main_menu(messages, user_choices):
     return answer['choice']
 
 
-def prompt_end_menu(messages, user_choices):
-    menu = [
-        inquirer3.List("choice", message = messages, choices = user_choices)
-    ]
+def adjust_game_diff():
+    global DEFAULT_ATTEMPTS
+    answer = prompt_menu("Please Select An Option", ["Level 1 - 5 Lives","Level 2 - 4 Lives", "Level 3 - 3 Lives","Level 4 - 2 Lives", "Level 5 - 1 Life"])
 
-    answer = inquirer3.prompt(menu)
-    os.system('cls' if os.name == 'nt' else 'clear')
 
-    return answer['choice']
+    match answer:
+        case "Level 1 - 5 Lives":
+            print("[-] You Are Now On Level 1.l. ")
+            time.sleep(1.5)
+            os.system('cls' if os.name == 'nt' else 'clear')
+        case "Level 2 - 4 Lives":
+            DEFAULT_ATTEMPTS = 4
+            print("[-] You Are Now On Level 2... ")
+            time.sleep(1.5)
+            os.system('cls' if os.name == 'nt' else 'clear')
+            return DEFAULT_ATTEMPTS
+
+        case "Level 3 - 3 Lives":
+            DEFAULT_ATTEMPTS = 3
+            print("[-] You Are Now On Level 3... ")
+            time.sleep(1.5)
+            os.system('cls' if os.name == 'nt' else 'clear')
+            return DEFAULT_ATTEMPTS
+
+        case "Level 4 - 2 Lives":
+            DEFAULT_ATTEMPTS = 2
+            print("[-] You Are Now On Level 4... ")
+            time.sleep(1.5)
+            os.system('cls' if os.name == 'nt' else 'clear')
+            return DEFAULT_ATTEMPTS
+
+        case "Level 5 - 1 Lives":
+            DEFAULT_ATTEMPTS = 1
+            print("[-] You Are Now On Level 5... ")
+            time.sleep(1.5)
+            os.system('cls' if os.name == 'nt' else 'clear')
+            return DEFAULT_ATTEMPTS
+
+        
+
 
 def main():
     while True:
-            response = prompt_main_menu("Please Select an option", ["Exit", "Difficulty", "Word Length", "Play Game"])
+            response = prompt_menu("Please Select an option", ["Exit", "Difficulty", "Word Length", "Play Game"])
 
             match response:
                 case "Exit":
                     print("Thanks For Visiting!")
                     exit()
                 case "Difficulty":
-                    print("Banana")
+                    adjust_game_diff()
                 case "Word Length":
                     print("Not Yet")
                 case "Play Game":
@@ -124,9 +161,6 @@ def main():
 
         
 
-
-
-    # user_response = prompt_end_menu("Please Select an Option", "")
 
 
 
