@@ -10,8 +10,12 @@ import time
 
 WORD_LIST = []
 WORD_LEN = 5
-DEFAULT_ATTEMPTS = 5
+USER_LIVES = 5
+level = 1
 
+def check_level():
+    pass
+    
 
 def extract_words():
     try:
@@ -31,45 +35,54 @@ def get_random_number():
     return int(value) 
 
 def play_game():
-    global DEFAULT_ATTEMPTS
+    global USER_LIVES
+    global WORD_LEN
     extract_words()
     random_val = get_random_number()
-    USER_ATTEMPTS = 0
-    print("[-] Welcome to Jayden's WORDLE. You Have" , DEFAULT_ATTEMPTS, "Tries In Order To Guess The Word! Goodluck ;).")
+    USER_ATTEMPTS = 1 # This take into account the first attempt, since if it's equal to 
+    print("[-] Welcome to Jayden's WORDLE. You Have" , USER_LIVES, "Lives In Order To Try To Guess The Word Correctly or Else You Lose! Goodluck ;).")
 
     while True:
         target = WORD_LIST[random_val]
         print(target)
-        guess = input("[-] Please enter a 5 letter word :): ")
+        guess = input(f"[-] Please enter a {str(WORD_LEN)} letter word :): ")
         answer = ["Bascat" for i in range(len(target))]
 
-        if USER_ATTEMPTS == DEFAULT_ATTEMPTS:
-            print("[!] The Correct Word Was..",target)
-            time.sleep(5)
+        if USER_ATTEMPTS == USER_LIVES and guess != target:
             os.system('cls' if os.name == 'nt' else 'clear')
-
+            print("[!] Incorrect! You Have Now Run Out Of Lives. The Correct Word Was...",target)
+            time.sleep(2.5)
             end_options = prompt_menu("You Lost! Would You Like To Play Again?", ["YES", "NO"])
 
             match end_options:
                 case "YES":
                     play_game()
                 case "NO":
-                    main()
-                    
+                    exit()
 
-        if guess == target:
+        elif guess == target:
             os.system('cls' if os.name == 'nt' else 'clear')
-            print("[!] Winner Winner Chicken Dinner!")
-            time.sleep(1.5)
-            os.system('cls' if os.name == 'nt' else 'clear')
-            end_options = prompt_menu("You Won! Would You Like To Play Again?", ["YES", "NO"])
+            print("[!] Correct! Winner Winner Chicken Dinner!")
+            time.sleep(2.5)
+            end_options = prompt_menu("You Won! Would You Like To Play Again? (If You Do The Target Word Will Be Changed)", ["YES", "NO"])
             
             match end_options:
                 case "YES":
                     play_game()
                 case "NO":
-                    main()
-
+                    exit()
+        
+        elif USER_ATTEMPTS == USER_LIVES and guess == target:
+            os.system('cls' if os.name == 'nt' else 'clear')
+            print("[!] Correct! Winner Winner Chicken Dinner!")
+            time.sleep(2.5)
+            end_options = prompt_menu("You Won! Would You Like To Play Again? (If You Do The Target Work Will Be Changed)", ["YES", "NO"])
+            
+            match end_options:
+                case "YES":
+                    play_game()
+                case "NO":
+                    exit()
 
         else:
             USER_ATTEMPTS += 1
@@ -80,16 +93,10 @@ def play_game():
                             answer[g_digit] = "Chophy"
                         else:
                             answer[g_digit] = "Storts"
-    
-
-    
 
         print(answer)
-        print("[-] Tries left:", DEFAULT_ATTEMPTS-USER_ATTEMPTS )
+        print("[-] Lives Remaining:", USER_LIVES-USER_ATTEMPTS + 1)        
 
-
-        
-    
 
 def prompt_menu(messages, user_choices):
     menu = [
@@ -103,58 +110,95 @@ def prompt_menu(messages, user_choices):
 
 
 def adjust_game_diff():
-    global DEFAULT_ATTEMPTS
-    answer = prompt_menu("Please Select An Option", ["Level 1 - 5 Lives","Level 2 - 4 Lives", "Level 3 - 3 Lives","Level 4 - 2 Lives", "Level 5 - 1 Life"])
+    global USER_LIVES
+    global WORD_LEN
+    answer = prompt_menu("Please Select A Level",["Very Easy","Easy", "Medium ","Hard", "Impossible"])
+
+    match answer:
+        case "Very Easy":
+            USER_LIVES = 15
+            WORD_LEN = 3
+            return USER_LIVES, WORD_LEN
+        case "Easy":
+            USER_LIVES = 10
+            WORD_LEN = 4
+            return USER_LIVES, WORD_LEN
+        case "Medium":
+            USER_LIVES = 5
+            WORD_LEN = 5
+            return USER_LIVES, WORD_LEN
+        case "Hard":
+            USER_LIVES = 3
+            WORD_LEN = 7
+            return USER_LIVES, WORD_LEN
+        case "Impossible":
+            USER_LIVES = 1
+            WORD_LEN = 10
+            return USER_LIVES, WORD_LEN
+
+
+def adjust_game_lives():
+    global USER_LIVES
+    answer = prompt_menu("Please Select The Amount Of Lives You Want", ["1 Life", "2 Lives","3 Lives","4 Lives", "5 Lives"])
 
 
     match answer:
-        case "Level 1 - 5 Lives":
-            print("[-] You Are Now On Level 1.l. ")
-            time.sleep(1.5)
+        case "5 Lives":
+            print("[-] You Now Have 5 Lives... ")
+            time.sleep(1)
             os.system('cls' if os.name == 'nt' else 'clear')
-        case "Level 2 - 4 Lives":
-            DEFAULT_ATTEMPTS = 4
-            print("[-] You Are Now On Level 2... ")
-            time.sleep(1.5)
+        case "4 Lives":
+            USER_LIVES = 4
+            print("[-] You Now Have 4 Lives... ")
+            time.sleep(1)
             os.system('cls' if os.name == 'nt' else 'clear')
-            return DEFAULT_ATTEMPTS
+            return USER_LIVES
 
-        case "Level 3 - 3 Lives":
-            DEFAULT_ATTEMPTS = 3
-            print("[-] You Are Now On Level 3... ")
-            time.sleep(1.5)
+        case "3 Lives":
+            USER_LIVES = 3
+            print("[-] You Now Have 3 Lives... ")
+            time.sleep(1)
             os.system('cls' if os.name == 'nt' else 'clear')
-            return DEFAULT_ATTEMPTS
+            return USER_LIVES
 
-        case "Level 4 - 2 Lives":
-            DEFAULT_ATTEMPTS = 2
-            print("[-] You Are Now On Level 4... ")
-            time.sleep(1.5)
+        case "2 Lives":
+            USER_LIVES = 2
+            print("[-] You Now Have 2 Lives... ")
+            time.sleep(1)
             os.system('cls' if os.name == 'nt' else 'clear')
-            return DEFAULT_ATTEMPTS
+            return USER_LIVES
 
-        case "Level 5 - 1 Lives":
-            DEFAULT_ATTEMPTS = 1
-            print("[-] You Are Now On Level 5... ")
-            time.sleep(1.5)
+        case "1 Lives":
+            USER_LIVES = 1
+            print("[-] You Now Have 1 Life... ")
+            time.sleep(1)
             os.system('cls' if os.name == 'nt' else 'clear')
-            return DEFAULT_ATTEMPTS
+            return USER_LIVES
 
+def adjust_word_length():
+    pass
         
 
 
 def main():
     while True:
-            response = prompt_menu("Please Select an option", ["Exit", "Difficulty", "Word Length", "Play Game"])
+            print("[-] Current Difficulty Level: Medium")
+            print("[-] Current Word Length:", WORD_LEN)
+            print("[-] Current Lives:",USER_LIVES)
+
+
+            response = prompt_menu("Please Select an option", ["Exit", "Difficulty Levels","Change Lives", "Change Word Length", "Play Game"])
 
             match response:
                 case "Exit":
                     print("Thanks For Visiting!")
                     exit()
-                case "Difficulty":
+                case "Difficulty Levels":
                     adjust_game_diff()
-                case "Word Length":
-                    print("Not Yet")
+                case "Change Lives":
+                    adjust_game_lives()
+                case "Change Word Length":
+                    adjust_word_length()
                 case "Play Game":
                     play_game()
                 
