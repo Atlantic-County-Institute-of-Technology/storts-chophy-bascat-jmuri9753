@@ -68,6 +68,7 @@ def play_game():
     while True:
         target = WORD_LIST[random_val]
         answer = ["Bascat" for i in range(len(target))]
+        print(target)
 
 
         def validate_user_guess():
@@ -90,25 +91,25 @@ def play_game():
         if USER_ATTEMPTS == USER_LIVES and USER_GUESS != target:
             os.system('cls' if os.name == 'nt' else 'clear')
             print("[!] Incorrect! You Have Now Run Out Of Lives. The Correct Word Was...",target)
-            time.sleep(2.5)
-            end_options = prompt_menu("You Lost! Would You Like To Play Again? (Hint: If You Do The Target Word Will Be Changed Randomly)", ["YES", "NO"])
+            time.sleep(1.5)
+            end_options = prompt_menu("You Lost! Would You Like To Play Again?", ["YES", "NO"])
 
             match end_options:
                 case "YES":
-                    play_game()
+                    main()
                 case "NO":
                     print("[!] Thank You For Playing \n")
                     exit()
 
-        elif USER_GUESS == target and USER_ATTEMPTS == USER_LIVES:
+        elif USER_GUESS == target:
             os.system('cls' if os.name == 'nt' else 'clear')
             print("[!] Correct! Winner Winner Chicken Dinner!")
-            time.sleep(2.5)
-            end_options = prompt_menu("You Won! Would You Like To Play Again? (Hint: If You Do The Target Word Will Be Changed Randomly)", ["YES", "NO"])
+            time.sleep(1.5)
+            end_options = prompt_menu("You Won! Would You Like To Play Again?", ["YES", "NO"])
             
             match end_options:
                 case "YES":
-                    play_game()
+                    main()
                 case "NO":
                     print("[-] Thank You For Playing \n")
                     exit()
@@ -188,7 +189,7 @@ def adjust_game_lives():
 
             USER_LIVES = custom_lives
             print("[!] You Now Have", USER_LIVES, "Lives...")
-            time.sleep(2)
+            time.sleep(1)
             os.system('cls' if os.name == 'nt' else 'clear')
             return USER_LIVES
             
