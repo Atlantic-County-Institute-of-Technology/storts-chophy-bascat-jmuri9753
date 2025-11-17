@@ -265,14 +265,14 @@ def adjust_word_length():
             def validate_word_length():
                 while True:
                     try:
-                        length = int(input("[-] Please Enter An Integer For The Word Length You'd Like Your Target Word To Have (It Can ONLY Be Between 1 And 20): "))
-                        if length >= 1 and length <= 20:
+                        length = int(input("[-] Please Enter An Integer For The Word Length You'd Like Your Target Word To Have (It Can ONLY Be Between 3 And 20): "))
+                        if length >= 3 and length <= 20:
                             return length
                         else:
-                            print("[!] ERROR! THE WORD LENGTH CAN ONLY BE BETWEEN 1 AND 20") 
+                            print("[!] ERROR! THE WORD LENGTH CAN ONLY BE BETWEEN 3 AND 20") 
                         
                     except:
-                        print("[!] ERROR! PLEASE ENTER AN INTEGER BETWEEN 1 AND 20!")
+                        print("[!] ERROR! PLEASE ENTER AN INTEGER BETWEEN 3 AND 20!")
             
             WORD_LEN = validate_word_length()
             print("[-] The Target Word Is Now",WORD_LEN, "Letters Long... ")
